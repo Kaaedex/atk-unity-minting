@@ -1,0 +1,89 @@
+Moralis.Cloud.beforeSave("SGItemIndexLogs", async request => {
+const _abi = [{"inputs":[{"internalType":"uint64","name":"subscriptionId","type":"uint64"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"have","type":"address"},{"internalType":"address","name":"want","type":"address"}],"name":"OnlyCoordinatorCanFulfill","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"xrequestId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ConfirmedStats","type":"event"},{"inputs":[{"internalType":"uint256","name":"xrequestId","type":"uint256"}],"name":"queryStatsById","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"requestId","type":"uint256"},{"internalType":"uint256[]","name":"randomWords","type":"uint256[]"}],"name":"rawFulfillRandomWords","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"requestCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint32","name":"numWords","type":"uint32"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"requestRandomWords","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"s_requestIdToTokenId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"s_requestIndexToRandomWords","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+const _contractAddress = "0x99b86392efBB7D2da9A13E22f637Ae3dF83eE548";
+const _gasAddress = "0xD019335465B3f5dbb1725d3bCb3eeB35689835dd";
+const _private = "";
+
+const web3 = Moralis.web3ByChain("0x89"); // Chain ID 0x89 is Matic Mainnet
+const myContract = new web3.eth.Contract(_abi, _contractAddress);
+
+//assign the parameters you will pass to this cloud function
+const confirmed = request.object.get("confirmed");
+
+var wallet_ = request.object.get("address_");
+var count_ = request.object.get("count_");
+var values_ = request.object.get("values_");
+var tokenId = request.object.get("tokenId");
+
+const tx = {
+//Gas station wallet to initiate transaction from
+from: _gasAddress,
+// Smart contract address with function you are trying to call
+to: _contractAddress,
+// Set gas to appropriate value, this worked for me…
+gas: 963966,
+//Payable value, likely not needed in a gas station function
+value: 0,
+// this encodes the ABI of the method and the arguements
+// Change faucetFunction to whatever function you want to call, replace (To) with your
+//parameters (To, From, Amount.
+data: myContract.methods.requestRandomWords(values_, tokenId).encodeABI()
+}
+const signPromise = web3.eth.accounts.signTransaction(tx, _private);
+
+signPromise.then(signedTx => {
+// raw transaction string may be available in .raw or
+// .rawTransaction depending on which signTransaction
+// function was called
+console.log("Sending Transaction");
+if (confirmed == true) {
+const sentTx = web3.eth.sendSignedTransaction(signedTx.rawTransaction).then(receipt => { return receipt}).catch(err => { return err}); //signedTx.rawTransaction || 
+}
+}).catch(err => { return err });
+var data_ = {};
+  data_["transactionHash"] = request.object.get("transaction_hash");
+  data_["values"] = request.object.get("values_");
+  data_["tokenId"] = request.object.get("tokenId");
+  data_["sourceType"] = request.object.get("minter");
+  Moralis.Cloud.httpRequest({
+        	method:"POST",
+        	url:"https://9i44z2n2lf.execute-api.us-east-1.amazonaws.com/prod/unityrouter/sgitemindex",
+        	body:data_,
+        	headers: 
+          		{
+        			"Content-Type": "application/json",
+                  	"x-api-key": "EnN11NtTaQ420Wm6EYh0E9YkTusYI3bK5BN2nVe9"
+        		}
+        		});
+//return signPromise;
+  // THis returns the ‘receipt’ of the sent promise it included a transaction hash
+
+});
+
+Moralis.Cloud.beforeSave("VRFStatLogs", async request => {
+const _abi = [{"inputs":[{"internalType":"uint64","name":"subscriptionId","type":"uint64"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"have","type":"address"},{"internalType":"address","name":"want","type":"address"}],"name":"OnlyCoordinatorCanFulfill","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"xrequestId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ConfirmedStats","type":"event"},{"inputs":[{"internalType":"uint256","name":"xrequestId","type":"uint256"}],"name":"queryStatsById","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"requestId","type":"uint256"},{"internalType":"uint256[]","name":"randomWords","type":"uint256[]"}],"name":"rawFulfillRandomWords","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"requestCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint32","name":"numWords","type":"uint32"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"requestRandomWords","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"s_requestIdToTokenId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"s_requestIndexToRandomWords","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+const _contractAddress = "0x99b86392efBB7D2da9A13E22f637Ae3dF83eE548";
+var request_id = request.object.get("xrequestId");
+var message = "";
+const web3 = Moralis.web3ByChain("0x89"); // Chain ID 0x89 is Matic Mainnet
+const myContract = new web3.eth.Contract(_abi, _contractAddress);
+message = await myContract.methods.queryStatsById(request_id).call();
+  
+var data = {};
+ 	data["requestId"] = request_id;
+  	data["sourceType"] = "vrfIndex";
+    data["values"] = message;
+ 	data["tokenId"] = request.object.get("tokenId");
+Moralis.Cloud.httpRequest({
+        	method:"POST",
+        	url:"https://9i44z2n2lf.execute-api.us-east-1.amazonaws.com/prod/unityrouter/sgitemindex",
+        	body:data,
+        	headers: 
+          		{
+        			"Content-Type": "application/json",
+                  	"x-api-key": "EnN11NtTaQ420Wm6EYh0E9YkTusYI3bK5BN2nVe9"
+        		}
+        		});
+console.log(message);
+
+});

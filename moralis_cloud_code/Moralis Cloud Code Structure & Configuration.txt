@@ -1,0 +1,16 @@
+Moralis Code & Components
+
+Moralis Server:
+Networks: Polygon Mainnet, Ethereum Mainnet
+
+//Sync Contracts / Sync Contract Events
+
+Sync Event 1 -
+"ItemCreate" - Event from ScrapGuilds Item Minting Contract
+Event: ItemCreate(address, uint256, uint256, uint256);
+Contract: 0x4353ca2dB366A572e0Dba6E679862C9E966A1251
+Table: SGItemIndexLogs
+
+Sync Event 2
+"ConfirmedStats()" - Event from VRF Contract Returns TokenID and RequestID of Stats
+ConfirmedStats(uint256, uint256);
